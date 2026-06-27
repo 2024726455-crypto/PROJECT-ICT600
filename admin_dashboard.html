@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Dashboard | Badminton Booking System</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Basic styling for admin layout */
+    .admin-container { max-width: 900px; margin: auto; padding: 20px; }
+    .filter-bar { display: flex; gap: 10px; margin-bottom: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: center; }
+    .btn-approve { background-color: green; color: white; padding: 5px 10px; cursor: pointer; }
+    .btn-reject { background-color: red; color: white; padding: 5px 10px; cursor: pointer; }
+  </style>
+</head>
+<body data-page="admin">
+  <main class="admin-container">
+    <h1>Admin Dashboard</h1>
+    <button id="adminLogout" style="float: right;">Logout</button>
+
+    <hr>
+    
+    <h2>Registered Users</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>User ID</th>
+          <th>Full Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+        </tr>
+      </thead>
+      <tbody id="adminUsersList"></tbody>
+    </table>
+
+    <hr>
+
+    <h2>Manage Bookings</h2>
+    <div class="filter-bar">
+      <input type="text" id="searchName" placeholder="Search by User Name...">
+      <select id="filterStatus">
+        <option value="">All Statuses</option>
+        <option value="Pending">Pending</option>
+        <option value="Approved">Approved</option>
+        <option value="Rejected">Rejected</option>
+      </select>
+      <input type="date" id="filterDate">
+      <button id="btnSearch">Search / Filter</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>User</th>
+          <th>Court</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="adminBookingsList"></tbody>
+    </table>
+
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
