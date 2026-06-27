@@ -1,0 +1,84 @@
+-- Create the database
+CREATE DATABASE badminton_booking;
+USE badminton_booking;
+
+-- 1. USERS TABLE
+CREATE TABLE Users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(15),
+    role ENUM('Customer', 'Admin') DEFAULT 'Customer'
+);
+
+-- 2. COURTS TABLE
+CREATE TABLE Courts (
+    court_id INT AUTO_INCREMENT PRIMARY KEY,
+    court_name VARCHAR(50) NOT NULL,
+    court_type VARCHAR(50),
+    price_per_hour DECIMAL(10,2) NOT NULL,
+    status ENUM('Available', 'Maintenance') DEFAULT 'Available'
+);
+
+-- 3. MEMBERSHIPS TABLE
+CREATE TABLE Memberships (
+    membership_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    membership_type ENUM('Monthly', 'Quarterly', 'Yearly'),
+    start_date DATE,
+    expiry_date DATE,
+    status ENUM('Active', 'Expired') DEFAULT 'Active',
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
+);
+
+-- 4. BOOKINGS TABLE
+CREATE TABLE Bookings (
+    booking_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    court_id INT,
+    booking_date DATE,
+    start_time TIME,
+    end_time TIME,
+    total_price DECIMAL(10,2),
+    status ENUM('Pending', 'Approved', 'Rejected') DEFAULT 'Pending',
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (court_id) REFERENCES Courts(court_id) ON DELETE CASCADE
+);
+
+-- 5. PAYMENTS TABLE
+CREATE TABLE Payments (
+    payment_id INT AUTO_INCREMENT PRIMARY KEY,
+    booking_id INT,
+    payment_method VARCHAR(50),
+    amount DECIMAL(10,2),
+    payment_date DATE,
+    payment_status ENUM('Pending', 'Paid'),
+    transaction_id VARCHAR(100),
+    FOREIGN KEY (booking_id) REFERENCES Bookings(booking_id) ON DELETE CASCADE
+);
+
+-- 6. BOOKING_HISTORY TABLE
+CREATE TABLE Booking_History (
+    history_id INT AUTO_INCREMENT PRIMARY KEY,
+    booking_id INT,
+    action VARCHAR(50),
+    action_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    remarks TEXT,
+    FOREIGN KEY (booking_id) REFERENCES Bookings(booking_id) ON DELETE CASCADE
+);
+
+-- ==========================================
+-- SEED DATA: Insert default Courts
+-- ==========================================
+INSERT INTO Courts (court_name, court_type, price_per_hour, status) VALUES 
+('Court 1', 'Indoor', 20.00, 'Available'),
+('Court 2', 'Indoor', 20.00, 'Available'),
+('Court 3', 'Indoor', 20.00, 'Available'),
+('Court 4', 'Indoor', 20.00, 'Available');
+
+-- ==========================================
+-- SEED DATA: Insert default Admin Account
+-- ==========================================
+INSERT INTO Users (full_name, email, password, phone_number, role) 
+VALUES ('System Administrator', 'admin@gmail.com', 'admin123', '0191234567', 'Admin');
